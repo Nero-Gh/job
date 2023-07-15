@@ -56,17 +56,37 @@ export const allJobs = async (req, res, next) => {
   let cat = req.query.cat;
   let categ = cat !== "" ? cat : ids;
 
+  //jobs by location
+  const location = [];
+  const jobByLocation = await Job.find({}, { location: 1 });
+  jobByLocation.map((item) => {
+    location.push(item.location);
+  });
+  //remove duplication
+  let setUniqueLocation = [...new Set(location)];
+  let locate = req.query.location;
+  //filter location
+  let locationFilter = locate !== "" ? locate : setUniqueLocation;
+
   //enable pagination
   const pageSize = 5;
   const page = Number(req.query.pageNumber) || 1;
   //   const count = await Job.find({}).estimatedDocumentCount();
 
   // count the number of jobs that match the keyword
-  const count = await Job.find({ ...keyword, JobType: categ }).countDocuments();
+  const count = await Job.find({
+    ...keyword,
+    JobType: categ,
+    location: locationFilter,
+  }).countDocuments();
 
   try {
     //count the number of jobs that match the keyword
-    const job = await Job.find({ ...keyword, JobType: categ })
+    const job = await Job.find({
+      ...keyword,
+      JobType: categ,
+      location: locationFilter,
+    })
       .sort({ createdAt: -1 })
       .select("-password")
       .skip(pageSize * (page - 1))

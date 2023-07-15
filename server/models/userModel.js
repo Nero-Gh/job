@@ -1,6 +1,43 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { ObjectId } from "mongoose";
+
+const jobHistorySchema = new mongoose.Schema(
+  {
+    title: {
+      type: String,
+      trim: true,
+      maxlength: 32,
+    },
+    description: {
+      type: String,
+      trim: true,
+    },
+    salary: {
+      type: String,
+      trim: true,
+    },
+    location: {
+      type: String,
+    },
+    interviewDate: {
+      type: Date,
+    },
+
+    user: {
+      type: ObjectId,
+      ref: "User",
+      required: true,
+    },
+    applicationStatus: {
+      type: String,
+      enum: ["pending", "accepted", "rejected"],
+      default: "pending",
+    },
+  },
+  { timestamps: true }
+);
 
 const userSchema = new mongoose.Schema(
   {
@@ -30,6 +67,7 @@ const userSchema = new mongoose.Schema(
       trim: true,
       minlength: [6, "Password must be at least 6 characters long"],
     },
+    jobHistory: [jobHistorySchema],
     role: {
       type: Number,
       default: 0,

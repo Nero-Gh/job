@@ -3,6 +3,7 @@ import express from "express";
 import { isAdmin, isAuthenticated } from "../middleware/auth.js";
 import {
   allUsers,
+  createJobHistory,
   deleteUser,
   singleUser,
   updateUser,
@@ -23,5 +24,8 @@ userRouter.put("/user/edit/:id", isAuthenticated, updateUser);
 
 //delete user api
 userRouter.delete("/user/delete/:id", isAuthenticated, isAdmin, deleteUser);
+
+//create job history api
+userRouter.post("/user/jobhistory", isAuthenticated, isAdmin, createJobHistory);
 
 export default userRouter;

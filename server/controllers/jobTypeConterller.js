@@ -44,3 +44,42 @@ export const allJobsType = async (req, res, next) => {
     next(error);
   }
 };
+
+/**
+ * Description: update jobs category
+ * Route: /type/update/jobs/:id
+ * Role:Admin
+ */
+export const updateJobsType = async (req, res, next) => {
+  try {
+    const jobtype = await JobType.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
+
+    res.status(201).json({
+      success: true,
+      message: "Job updated  successfully",
+      data: jobtype,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Description: delete jobs category
+ * Route: /type/delete/jobs/:id
+ * Role:Admin
+ */
+export const deleteJobsType = async (req, res, next) => {
+  try {
+    const jobtype = await JobType.findByIdAndRemove(req.params.id);
+
+    res.status(201).json({
+      success: true,
+      message: "Job deleted successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+};

@@ -94,3 +94,37 @@ export const deleteUser = async (req, res, next) => {
     return next(error);
   }
 };
+
+/**
+ * Description: create job history
+ * Route: /user/job-history/create
+ */
+export const createJobHistory = async (req, res, next) => {
+  const { title, description, salary, location } = req.body;
+  try {
+    //check if user exit
+    const currentUser = await User.findOne({ _id: req.user._id });
+
+    if (!currentUser) {
+      return next(new ErrorResponse("You must log in", 401));
+    } else {
+      const addJobHistory = {
+        title,
+        description,
+        salary,
+        location,
+        user: req.user._id,
+      };
+      currentUser.jobHistory.push(addJobHistory);
+      await currentUser.save();
+    }
+    res.status(200).json({
+      success: true,
+      message: "Job history added successfully",
+      data: currentUser,
+    });
+    next();
+  } catch (error) {
+    return next(error);
+  }
+};
