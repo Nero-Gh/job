@@ -1,5 +1,6 @@
 import { Box, Typography, styled } from "@mui/material";
 import React from "react";
+import SearchInput from "./SearchInput";
 
 const Header = () => {
   const StyleHeader = styled(Box)(({ theme }) => ({
@@ -23,6 +24,7 @@ const Header = () => {
           }}
         >
           Job Portal
+          <SearchInput />
         </Typography>
       </StyleHeader>
     </>

@@ -82,7 +82,7 @@ export const allJobs = async (req, res, next) => {
 
   try {
     //count the number of jobs that match the keyword
-    const job = await Job.find({
+    const jobs = await Job.find({
       ...keyword,
       JobType: categ,
       location: locationFilter,
@@ -96,10 +96,11 @@ export const allJobs = async (req, res, next) => {
     res.status(201).json({
       success: true,
       message: "All jobs fetched successfully",
-      data: job,
-      page: page,
+      jobs,
+      page,
       pages: Math.ceil(count / pageSize),
-      count: count,
+      count,
+      //setUniqueLocation,
     });
   } catch (error) {
     next(error);

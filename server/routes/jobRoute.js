@@ -1,7 +1,12 @@
 import express from "express";
 
 import { isAdmin, isAuthenticated } from "../middleware/auth.js";
-import { allJobs, createJob, singleJob, updateJob } from "../controllers/jobController.js";
+import {
+  allJobs,
+  createJob,
+  singleJob,
+  updateJob,
+} from "../controllers/jobController.js";
 
 const jobRouter = express.Router();
 
@@ -11,7 +16,7 @@ const jobRouter = express.Router();
 jobRouter.post("/job/create", isAuthenticated, isAdmin, createJob);
 
 //all jobs api
-jobRouter.get("/job", isAuthenticated, allJobs);
+jobRouter.get("/job", allJobs);
 
 //single job api
 jobRouter.get("/job/:id", isAuthenticated, singleJob);

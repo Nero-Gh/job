@@ -38,7 +38,7 @@ export const allJobsType = async (req, res, next) => {
     res.status(201).json({
       success: true,
       message: "All jobs fetched successfully",
-      data: jobtype,
+      jobtype,
     });
   } catch (error) {
     next(error);

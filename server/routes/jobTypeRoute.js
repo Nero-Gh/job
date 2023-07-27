@@ -16,7 +16,7 @@ const jobTypeRouter = express.Router();
 jobTypeRouter.post("/type/create", isAuthenticated, isAdmin, createJobType);
 
 //all jobs type api
-jobTypeRouter.get("/type/jobs", isAuthenticated, allJobsType);
+jobTypeRouter.get("/type/jobs", allJobsType);
 
 //update job type api
 jobTypeRouter.put(

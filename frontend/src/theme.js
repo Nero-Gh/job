@@ -9,6 +9,7 @@ export const theme = createTheme({
     secondary: {
       main: lightBlue[800],
       midNightBlue: "#003366",
+      white: "#ffffff",
     },
   },
 });

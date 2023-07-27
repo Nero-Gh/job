@@ -5,13 +5,17 @@ import {
 } from "../constants/jobConstant";
 import axios from "axios";
 
+const endpoint = "http://localhost:5000";
+
 export const jobLoadAction =
   (pageNumber, keyword = "", cat = "", location = "") =>
   async (dispatch) => {
     dispatch({ type: JOB_LOAD_REQUEST });
     try {
       const { data } = await axios.get(
-        `/api/jobs?pageNumber=${pageNumber}&keyword=${keyword}&cat=${cat}&location=${location}`
+        // `${endpoint}/api/job`
+        // `/api/job?pageNumber=${pageNumber}&keyword=${keyword}&cat=${cat}&location=${location}`
+        `${endpoint}/api/job?pageNumber=${pageNumber}&keyword=${keyword}&cat=${cat}&location=${location}`
       );
 
       dispatch({ type: JOB_LOAD_SUCCESS, payload: data });

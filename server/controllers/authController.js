@@ -20,7 +20,7 @@ export const signUp = async (req, res, next) => {
     res.status(201).json({
       status: "success",
       message: "User created successfully",
-      data: user,
+      user,
     });
   } catch (error) {
     next(error);
@@ -47,12 +47,16 @@ export const signIn = async (req, res, next) => {
     //check userEmail
     const user = await User.findOne({ email });
     if (!user) {
-      return next(new ErrorResponse("Invalid response"), 400);
+      return res.status(404).json({
+        error: "Invalid Response",
+      });
     }
     //check password
     const isMatched = await user.comparePassword(password);
     if (!isMatched) {
-      return next(new ErrorResponse("Invalid response"), 400);
+      return res.status(404).json({
+        error: "Invalid Response",
+      });
     }
 
     sendTokenResponse(user, 200, res);
@@ -66,7 +70,7 @@ const sendTokenResponse = async (user, statusCode, res) => {
   res
     .status(statusCode)
     .cookie("token", token, { maxAge: 60 * 60 * 1000, httpOnly: true })
-    .json({ success: true, token, user });
+    .json({ success: true, token, role: user.role });
 };
 
 /**
@@ -80,7 +84,7 @@ export const logout = async (req, res, next) => {
   res.clearCookie("token");
   res.status(200).json({
     success: true,
-    message: "User Logged Out",
+    error: "User Logged Out",
   });
 };
 
@@ -92,9 +96,16 @@ export const logout = async (req, res, next) => {
  */
 
 export const userProfile = async (req, res, next) => {
-  const user = await User.findById(req.user.id).select("-password");
-  res.status(200).json({
-    success: true,
-    data: user,
-  });
+  try {
+    const user = await User.findById(req.user.id).select("-password");
+    res.status(201).json({
+      success: true,
+      user,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: true,
+      error: "Failed to fetch user data",
+    });
+  }
 };

@@ -12,13 +12,21 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
+import { useTheme } from "@emotion/react";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { userLogOutAction } from "../redux/actions/userAction";
 
 const pages = ["HOME"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function NavBar() {
+  const { userInfo } = useSelector((state) => state.signIn);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const { palette } = useTheme();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -33,6 +41,14 @@ function NavBar() {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const LogOutUser = () => {
+    dispatch(userLogOutAction);
+    window.location.reload();
+    setTimeout(() => {
+      navigate("/");
+    }, 200);
   };
 
   return (
@@ -147,11 +163,43 @@ function NavBar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+              <MenuItem onClick={handleCloseUserMenu}>
+                <Typography textAlign="center">
+                  <Link
+                    to="/user/dashboard"
+                    style={{
+                      color: palette.secondary.main,
+                    }}
+                  >
+                    Dashboard
+                  </Link>
+                </Typography>
+              </MenuItem>
+              {!userInfo ? (
+                <MenuItem onClick={handleCloseUserMenu}>
+                  <Typography textAlign="center">
+                    <Link
+                      to="/login"
+                      style={{
+                        color: palette.secondary.main,
+                      }}
+                    >
+                      Login
+                    </Link>
+                  </Typography>
                 </MenuItem>
-              ))}
+              ) : (
+                <MenuItem onClick={LogOutUser}>
+                  <Typography
+                    textAlign="center"
+                    style={{
+                      color: palette.secondary.main,
+                    }}
+                  >
+                    Logout
+                  </Typography>
+                </MenuItem>
+              )}
             </Menu>
           </Box>
         </Toolbar>
